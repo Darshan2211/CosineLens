@@ -93,3 +93,34 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+// INDEXES for DB
+productSchema.index({ category: 1 });
+productSchema.index({ brand: 1 });
+productSchema.index({ price: 1 });
+productSchema.index({ isActive: 1 });
+productSchema.index({ rating: -1 });
+productSchema.index({ "signal.purchases": -1 });
+productSchema.index({ category: 1, isActive: 1, price: 1 });
+
+// Building text for Embedding generation
+productSchema.methods.buildEmbeddingText = function () {
+  const attributeText = Object.entries(this.attributes)
+    .map(([key, value]) => `${key} : ${value}`)
+    .join(". ");
+
+  return [
+    this.name,
+    this.description,
+    this.category,
+    this.brand,
+    this.tags?.join(", "),
+    attributeText,
+  ]
+    .filter(Boolean)
+    .join(". ");
+};
+
+const productModel = mongoose.model("product", productSchema);
+
+module.exports = productModel;
