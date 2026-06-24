@@ -1,11 +1,11 @@
-require("dotenv").config();
-const mongoose = require("mongoose");
-const { GoogleGenAI } = require("@google/genai");
-const productModel = require("../models/product.model");
+import "dotenv/config.js"
+import mongoose from "mongoose"
+import { GoogleGenAI } from "@google/genai";
+import productModel from "../models/product.model.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
 
-async function generateEmbedding() {
+export const generateEmbedding = () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Embedding DB connection\n");
@@ -57,4 +57,4 @@ async function generateEmbedding() {
   }
 }
 
-module.exports = generateEmbedding;
+

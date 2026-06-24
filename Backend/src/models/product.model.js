@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose"
 
 const productSchema = new mongoose.Schema(
   {
@@ -333,4 +333,4 @@ const buildVectorFilter = ({ brand, minPrice, maxPrice, inStock }) => {
 
 const productModel = mongoose.model("product", productSchema);
 
-module.exports = productModel;
+export default productModel
