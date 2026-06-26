@@ -331,6 +331,6 @@ const buildVectorFilter = ({ brand, minPrice, maxPrice, inStock }) => {
   return conditions.length > 0 ? { compound: { must: conditions } } : null;
 };
 
-const productModel = mongoose.model("product", productSchema);
+export const productModel = mongoose.model("product", productSchema);
 
-export default productModel
+

@@ -1,7 +1,7 @@
 import "dotenv/config.js"
 import mongoose from "mongoose"
 import { GoogleGenAI } from "@google/genai";
-import productModel from "../models/product.model.js";
+import {productModel} from "../models/product.model.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
 
