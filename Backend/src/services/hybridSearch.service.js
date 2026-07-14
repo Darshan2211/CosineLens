@@ -56,7 +56,7 @@ export const hybridSearch = async (
   };
 
   applyRRF(vectorResults);
-  applyRRf(keywordResults);
+  applyRRF(keywordResults);
 
   const vectorIds = new Set(vectorResults.map((p) => p._id.toString()));
   const keywordIds = new Set(keywordResults.map((p) => p._id.toString()));

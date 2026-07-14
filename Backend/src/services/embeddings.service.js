@@ -9,7 +9,7 @@ const EMBEDDING_TTL = 86400;
 /**
  * Retrieves a cached embedding or generate a new
  * embedding using Gemini Embeddings API.
- * 
+ *
  * @param {string} text
  * @returns {Promise<number[]>}
  */
@@ -31,7 +31,8 @@ export const getEmbedding = async (text) => {
       encoding_format: "float",
       config: { outputDimensionality: 1536 },
     });
-    vector = response.data[0].embedding;
+    
+    vector = response.embeddings[0].values;
   } catch (error) {
     if (error.status === 429) throw new Error("Gemini rate limit hit");
     if (error.status === 401) throw new Error("Gemini key is invalid");

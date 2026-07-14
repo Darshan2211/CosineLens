@@ -1,4 +1,5 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
+import { pipeline } from "node:stream";
 
 const productSchema = new mongoose.Schema(
   {
@@ -151,20 +152,21 @@ productSchema.methods.buildEmbeddingText = function () {
 productSchema.statics.vectorSearch = async function (
   queryVector,
   filters = {},
-  limit = 20,
+  limit = 10,
 ) {
+  const filter = buildVectorFilter(filters);
+
   const pipeline = [
     // Stage 1 - vector similarity search
+
     {
       $vectorSearch: {
         index: "product_vector_index",
         path: "embedding",
-        queryVector: "queryVector",
-        numCandidates: "limit * 5",
+        queryVector: queryVector,
+        numCandidates: limit * 5,
         limit: limit,
-        ...(buildVectorFilter(filters) && {
-          filter: buildVectorFilter(filters),
-        }),
+        filter,
       },
     },
 
@@ -178,7 +180,7 @@ productSchema.statics.vectorSearch = async function (
     // Stage 3 - remove inactive and low match products
     {
       $match: {
-        vectorScore: { $gte: 0.5 },
+        // vectorScore: { $gte: 0.5 },
         isActive: true,
       },
     },
@@ -199,13 +201,10 @@ productSchema.statics.vectorSearch = async function (
         reviewCount: 1,
         signals: 1,
         vectorScore: 1,
-
-        embedding: 0,
-        embeddingText: 0,
-        embeddingUpdatedAt: 0,
       },
     },
   ];
+
   return this.aggregate(pipeline);
 };
 
@@ -229,7 +228,7 @@ productSchema.statics.vectorSearch = async function (
 productSchema.statics.keywordSearch = async function (
   query,
   filters = {},
-  limit = 20,
+  limit = 10,
 ) {
   const pipeline = [
     //Stage 1 - Keyword similarity search
@@ -261,9 +260,7 @@ productSchema.statics.keywordSearch = async function (
 
     // Stage 3 - isActive products to match
     {
-      $match: {
-        $isActive: true,
-      },
+      $match: buildMatchFilter(filters),
     },
 
     {
@@ -286,7 +283,6 @@ productSchema.statics.keywordSearch = async function (
         reviewCount: 1,
         signals: 1,
         textScore: 1,
-        embedding: 0,
       },
     },
   ];
@@ -309,28 +305,73 @@ productSchema.statics.keywordSearch = async function (
  * @returns {object|null}
  */
 const buildVectorFilter = ({ brand, minPrice, maxPrice, inStock }) => {
-  const conditions = [];
+  const filter = {
+    isActive: { $eq: true },
+  };
 
   if (brand) {
-    conditions.push({ equals: { path: "brand", value: brand } });
+    filter.brand = { $eq: brand };
   }
 
   if (inStock) {
-    conditions.push({ range: { path: "stock", gte: 1 } });
+    filter.stock = { $gte: 1 };
   }
 
   if (minPrice !== undefined || maxPrice !== undefined) {
-    conditions.push({
-      range: {
-        path: "price",
-        ...(minPrice !== undefined && { gte: Number(minPrice) }),
-        ...(maxPrice !== undefined && { gte: Number(maxPrice) }),
-      },
-    });
+    filter.price = {};
+
+    if (minPrice !== undefined) {
+      filter.price.$gte = Number(minPrice);
+    }
+
+    if (maxPrice !== undefined) {
+      filter.price.$lte = Number(maxPrice);
+    }
   }
-  return conditions.length > 0 ? { compound: { must: conditions } } : null;
+
+  return filter;
+};
+
+
+/**
+ * Build keyword ilter
+ * for user selected filters
+ *
+ * Filters :
+ *
+ * -Brand, minPrice, maxPrice, inStock
+ *
+ * @param {object} filters
+ * @param {string} [filters.brand]
+ * @param {number} [filter.minPrice]
+ * @param {number} [filter.maxPrice]
+ * @param {boolean} [filters.inStock]
+ * @returns {object|null}
+ */
+const buildMatchFilter = ({ brand, minPrice, maxPrice, inStock } = {}) => {
+  const match = {
+    isActive: true,
+  };
+
+  if (brand) {
+    match.brand = brand;
+  }
+  if (inStock) {
+    match.stock = {
+      $gte: 1,
+    };
+  }
+
+  if (minPrice !== undefined || maxPrice !== undefined) {
+    match.price = {};
+    if (minPrice !== undefined) {
+      match.price.$gte = Number(minPrice);
+    }
+    if (maxPrice !== undefined) {
+      match.price.$lte = Number(maxPrice);
+    }
+  }
+  return match;
 };
 
 export const productModel = mongoose.model("product", productSchema);
-
-

@@ -1,0 +1,36 @@
+import { searchProduct } from "../services/search.service.js";
+
+/**
+ * @description Handles product search requests and returns ranked search results
+ */
+export const search = async (req, res, next) => {
+  try {
+    const { q, brand, minPrice, maxPrice, inStock } = req.query;
+
+    if (!q?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query is required",
+      });
+    }
+
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
+
+    const filters = {
+      brand: brand || undefined,
+      minPrice: minPrice ? Number(minPrice) : undefined,
+      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+      inStock: inStock !== undefined ? inStock === "true" : undefined,
+    };
+
+    const result = await searchProduct(q.trim(), filters, page, limit);
+
+    return res.status(200).json({
+      success: true,
+      ...result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
