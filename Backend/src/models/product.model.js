@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { pipeline } from "node:stream";
 
 const productSchema = new mongoose.Schema(
   {
@@ -290,6 +289,99 @@ productSchema.statics.keywordSearch = async function (
 };
 
 /**
+ * Static : Autocomplete Search Method
+ *
+ * Matches the search product and suggest it
+ * MongoDB Atlas autcomplete index
+ *
+ * Suggest product on basis of search
+ *
+ * @param {string} query
+ * user query search
+ *
+ * @param {number} limit
+ * Maximum number of product to return
+ *
+ */
+productSchema.statics.autocomplete = async function (query, limit = 10) {
+  const pipeline = [
+    {
+      $search: {
+        index: "product_autocomplete_index",
+        compound: {
+          filter: {
+            equals: {
+              path: "isActive",
+              value: true,
+            },
+          },
+          should: [
+            {
+              autocomplete: {
+                query,
+                path: "name",
+                fuzzy: { maxEdits: 1, prefixLength: 2 },
+                score: { boost: { value: 5 } },
+              },
+            },
+            {
+              autocomplete: {
+                query,
+                path: "brand",
+                fuzzy: { maxEdits: 1, prefixLength: 2 },
+                score: { boost: { value: 5 } },
+              },
+            },
+            {
+              autocomplete: {
+                query,
+                path: "category",
+                fuzzy: { maxEdits: 1, prefixLength: 2 },
+                score: { boost: { value: 5 } },
+              },
+            },
+          ],
+          minimumShouldMatch: 1,
+        },
+      },
+    },
+
+    {
+      $addFields: {
+        score: { $meta: "searchScore" },
+      },
+    },
+
+    {
+      $group: {
+        _id: "$name",
+        score: { $first: "$score" },
+        brand: { $first: "$brand" },
+        category: { $first: "$category" },
+      },
+    },
+
+    {
+      $sort: { score: -1 },
+    },
+
+    {
+      $limit: limit,
+    },
+
+    {
+      $project: {
+        _id: 0,
+        suggestion: "$_id",
+        brand: 1,
+        category: 1,
+      },
+    },
+  ];
+  return this.aggregate(pipeline);
+};
+
+/**
  * Build mongodb atlas vector filters
  * for user selected filters
  *
@@ -331,7 +423,6 @@ const buildVectorFilter = ({ brand, minPrice, maxPrice, inStock }) => {
 
   return filter;
 };
-
 
 /**
  * Build keyword ilter
