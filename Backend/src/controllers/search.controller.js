@@ -1,4 +1,5 @@
 import { searchProduct } from "../services/search.service.js";
+import { getAutocompleteSuggestions } from "../services/autocomplete.service.js";
 
 /**
  * @description Handles product search requests and returns ranked search results
@@ -15,7 +16,7 @@ export const search = async (req, res, next) => {
     }
 
     const page = Math.max(1, Number(req.query.page) || 1);
-    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 20));
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 10));
 
     const filters = {
       brand: brand || undefined,
@@ -29,6 +30,25 @@ export const search = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       ...result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @description Handles autocomplete suggestion and return the suggested products on query
+ */
+export const autocomplete = async (req, res, next) => {
+  try {
+    const { q } = req.query;
+
+    const suggestions = await getAutocompleteSuggestions(q);
+
+    res.status(200).json({
+      success: true,
+      total: suggestions.length,
+      suggestions,
     });
   } catch (error) {
     next(error);
