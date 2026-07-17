@@ -148,11 +148,12 @@ productSchema.methods.buildEmbeddingText = function () {
  * @returns {Promise<Array>}
  *
  */
-productSchema.statics.vectorSearch = async function (
+productSchema.statics.vectorSearch = async function ({
   queryVector,
   filters = {},
   limit = 10,
-) {
+  excludeId = null,
+}) {
   const filter = buildVectorFilter(filters);
 
   const pipeline = [
@@ -181,6 +182,7 @@ productSchema.statics.vectorSearch = async function (
       $match: {
         // vectorScore: { $gte: 0.5 },
         isActive: true,
+        ...(excludeId && { _id: { $ne: excludeId } }),
       },
     },
 

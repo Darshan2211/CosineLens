@@ -1,13 +1,15 @@
 import "dotenv/config.js";
 import express from "express";
-import { searchRouter } from "./routes/search.routes.js";
+import { searchRouter } from "./routes/search.route.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import { productRouter } from "./routes/product.route.js";
 
 const app = express();
 
 app.use(express.json());
 
 app.use("/api/search", searchRouter);
+app.use("/api/products", productRouter)
 
 app.use(errorHandler);
 export default app;
