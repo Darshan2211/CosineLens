@@ -16,11 +16,13 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
     brand: {
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
     price: {
       type: Number,
@@ -29,7 +31,8 @@ const productSchema = new mongoose.Schema(
     },
     tags: {
       type: [String],
-      default: [],
+      trim: true,
+      lowercase: true,
     },
     attributes: {
       type: mongoose.Schema.Types.Mixed,
@@ -148,12 +151,12 @@ productSchema.methods.buildEmbeddingText = function () {
  * @returns {Promise<Array>}
  *
  */
-productSchema.statics.vectorSearch = async function ({
+productSchema.statics.vectorSearch = async function (
   queryVector,
   filters = {},
   limit = 10,
   excludeId = null,
-}) {
+) {
   const filter = buildVectorFilter(filters);
 
   const pipeline = [
