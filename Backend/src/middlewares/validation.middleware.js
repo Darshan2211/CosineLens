@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 
 export const createProductValidation = [
   body("name").trim().notEmpty().withMessage("Name is required"),
@@ -24,6 +24,36 @@ export const createProductValidation = [
     .withMessage("At least one image is required"),
 ];
 
+export const updateProductValidation = [
+  param("id").isMongoId().withMessage("Invalid product id"),
+
+  body("name")
+    .optional()
+    .trim()
+    .isLength({ min: 3, max: 200 })
+    .withMessage("Name must be between 3 and 200 characters"),
+
+  body("description")
+    .optional()
+    .trim()
+    .isLength({ min: 10 })
+    .withMessage("Description must be at least 10 characters"),
+
+  body("category").optional().trim().isLength({ min: 2 }),
+
+  body("brand").optional().trim().isLength({ min: 2 }),
+
+  body("price").optional().isFloat({ min: 0 }),
+
+  body("stock").optional().isInt({ min: 0 }),
+
+  body("tags").optional().isArray(),
+
+  body("attributes").optional().isObject(),
+
+  body("images").optional().isArray(),
+];
+
 export const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
 
@@ -34,5 +64,3 @@ export const handleValidationErrors = (req, res, next) => {
   }
   next();
 };
-
-
