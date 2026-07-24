@@ -54,6 +54,10 @@ export const updateProductValidation = [
   body("images").optional().isArray(),
 ];
 
+export const deleteProductValidation = [
+  param("id").isMongoId().withMessage("Invalid Product Id"),
+];
+
 export const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
 

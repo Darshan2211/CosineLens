@@ -200,3 +200,32 @@ export const updateProduct = async ({ id, productData }) => {
 
   return updated;
 };
+
+export const deleteProduct = async ({ id }) => {
+  const product = await productModel.findByIdAndUpdate(id);
+
+  if (!product) {
+    throw new AppError("Product Not Found", 404);
+  }
+
+  if (!product.isActive) {
+    throw new AppError("Product is already deleted", 409);
+  }
+
+  product.isActive = false;
+
+  await product.save();
+
+  await Promise.allSettled([
+    deleteCache(`product:${id}`),
+    deleteCache(`related:${id}`),
+    deleteCache("search:*"),
+  ]);
+
+  const deleteProduct = await productModel
+    .findById(id)
+    .select("-embedding -embeddingText -embeddingUpdatedAt")
+    .lean();
+
+  return deleteProduct;
+};

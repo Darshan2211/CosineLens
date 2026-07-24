@@ -41,10 +41,17 @@ productRouter.post(
  * @abstract private
  */
 productRouter.put(
-  "/admin/update/:id",
+  "/admin/:id/update",
   validationMiddleware.updateProductValidation,
   productController.updateProductController,
 );
+
+
+
+productRouter.patch("/admin/:id/delete",
+  validationMiddleware.deleteProductValidation,
+  productController.deleteProductController
+)
 
 /**
  * USER

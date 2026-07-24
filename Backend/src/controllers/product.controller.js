@@ -4,12 +4,13 @@ import {
   updateProduct,
   searchAdminProduct,
   getAdminProductById,
+  deleteProduct,
 } from "../services/product.service.js";
 
 /**
  * @description Controller to get product by id and its related products
  */
-export const getProductByIdController = async (req, res) => {
+export const getProductByIdController = async (req, res, next) => {
   try {
     const product = await getUserProductById(req.params.id);
 
@@ -17,16 +18,14 @@ export const getProductByIdController = async (req, res) => {
       product,
     });
   } catch (error) {
-    console.error("Product Id error", error);
-    res.status(500).json({ message: "Product not Found" });
+    next(error);
   }
 };
-
 
 /**
  * @description Controller to search product by admin query
  */
-export const searchAdminProductController = async (req, res) => {
+export const searchAdminProductController = async (req, res, next) => {
   try {
     const product = await searchAdminProduct(req.query);
 
@@ -34,15 +33,14 @@ export const searchAdminProductController = async (req, res) => {
       product,
     });
   } catch (error) {
-    console.error("Product Id error", error);
-    res.status(500).json({ message: "Product not Found" });
+    next(error);
   }
 };
 
 /**
  * @description Controller to get product by id for admin
  */
-export const getAdminProductController = async (req, res) => {
+export const getAdminProductController = async (req, res, next) => {
   try {
     const product = await getAdminProductById(req.params.id);
 
@@ -57,7 +55,7 @@ export const getAdminProductController = async (req, res) => {
 /**
  * @description Controller to create product by admin and automatic embedding generation
  */
-export const createProductController = async (req, res) => {
+export const createProductController = async (req, res, next) => {
   const {
     name,
     description,
@@ -77,15 +75,14 @@ export const createProductController = async (req, res) => {
       message: "Product Created Succesfully",
     });
   } catch (error) {
-    console.error("Product Creation Error", error);
-    res.status(500).json({ message: "Product creation failed" });
+    next(error);
   }
 };
 
 /**
  * @description Controller to update product by admin
  */
-export const updateProductController = async (req, res) => {
+export const updateProductController = async (req, res, next) => {
   try {
     const updatedProduct = await updateProduct({
       id: req.params.id,
@@ -97,7 +94,19 @@ export const updateProductController = async (req, res) => {
       updatedProduct,
     });
   } catch (error) {
-    console.error("Prouduct Update Failed", error);
-    res.status(500).json({ message: "Product Update Failed" });
+    next(error);
+  }
+};
+
+export const deleteProductController = async (req, res, next) => {
+  try {
+    const deletedProduct = await deleteProduct({ id: req.params.id });
+
+    return res.status(200).json({
+      success: true,
+      deletedProduct,
+    });
+  } catch (error) {
+    next(error);
   }
 };
