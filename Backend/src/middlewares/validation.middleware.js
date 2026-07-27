@@ -1,5 +1,51 @@
 import { body, param, validationResult } from "express-validator";
 
+
+export const registerValidation = [
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email is required")
+    .isLength({ max: 100 })
+    .withMessage("Email too long")
+    .isEmail()
+    .withMessage("Invalid email address")
+    .normalizeEmail(),
+
+  body("username")
+    .trim()
+    .toLowerCase()
+    .isLength({ max: 50 })
+    .withMessage("Name too long")
+    .notEmpty()
+    .withMessage("Name is required"),
+
+  body("password")
+    .trim()
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain lowercase letters"),
+];
+
+export const loginValidation = [
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email is required")
+    .isLength({ max: 100 })
+    .withMessage("Email too long")
+    .isEmail()
+    .withMessage("Invalid email address")
+    .normalizeEmail(),
+
+   body("password")
+    .notEmpty()
+    .withMessage("Password is required"),
+];
+
 export const createProductValidation = [
   body("name").trim().notEmpty().withMessage("Name is required"),
 

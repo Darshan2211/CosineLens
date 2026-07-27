@@ -1,6 +1,5 @@
 import express from "express";
-import { Router } from "express";
-export const searchRouter = Router();
+export const searchRouter = express.Router();
 import * as searchController from "../controllers/search.controller.js";
 
 /**

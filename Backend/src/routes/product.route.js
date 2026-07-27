@@ -1,6 +1,5 @@
 import express from "express";
-import { Router } from "express";
-export const productRouter = Router();
+export const productRouter = express.Router();
 import * as productController from "../controllers/product.controller.js";
 import * as validationMiddleware from "../middlewares/validation.middleware.js";
 
@@ -46,12 +45,16 @@ productRouter.put(
   productController.updateProductController,
 );
 
-
-
-productRouter.patch("/admin/:id/delete",
+/**
+ * @route PATCH /api/products/admin/:id/delete
+ * @description Route to delete product by id
+ * @abstract private
+ */
+productRouter.patch(
+  "/admin/:id/delete",
   validationMiddleware.deleteProductValidation,
-  productController.deleteProductController
-)
+  productController.deleteProductController,
+);
 
 /**
  * USER

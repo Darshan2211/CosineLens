@@ -201,6 +201,9 @@ export const updateProduct = async ({ id, productData }) => {
   return updated;
 };
 
+/**
+ * @description Service to delete a product by setting its isActive flag to false
+ */
 export const deleteProduct = async ({ id }) => {
   const product = await productModel.findByIdAndUpdate(id);
 

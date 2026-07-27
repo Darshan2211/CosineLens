@@ -8,6 +8,7 @@ import {
 } from "../services/product.service.js";
 
 /**
+ * @name getProductByIdController
  * @description Controller to get product by id and its related products
  */
 export const getProductByIdController = async (req, res, next) => {
@@ -23,6 +24,7 @@ export const getProductByIdController = async (req, res, next) => {
 };
 
 /**
+ * @name searchAdminProductController
  * @description Controller to search product by admin query
  */
 export const searchAdminProductController = async (req, res, next) => {
@@ -38,6 +40,7 @@ export const searchAdminProductController = async (req, res, next) => {
 };
 
 /**
+ * @name getAdminProductController
  * @description Controller to get product by id for admin
  */
 export const getAdminProductController = async (req, res, next) => {
@@ -53,6 +56,7 @@ export const getAdminProductController = async (req, res, next) => {
 };
 
 /**
+ * @name createProductController
  * @description Controller to create product by admin and automatic embedding generation
  */
 export const createProductController = async (req, res, next) => {
@@ -80,6 +84,7 @@ export const createProductController = async (req, res, next) => {
 };
 
 /**
+ * @name updateProductController
  * @description Controller to update product by admin
  */
 export const updateProductController = async (req, res, next) => {
@@ -98,6 +103,10 @@ export const updateProductController = async (req, res, next) => {
   }
 };
 
+/**
+ * @name deleteProductController
+ * @description Controller to delete product by admin
+ */
 export const deleteProductController = async (req, res, next) => {
   try {
     const deletedProduct = await deleteProduct({ id: req.params.id });
