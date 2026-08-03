@@ -2,7 +2,9 @@ import { searchProduct } from "../services/search.service.js";
 import { getAutocompleteSuggestions } from "../services/autocomplete.service.js";
 
 /**
+ * @name search
  * @description Handles product search requests and returns ranked search results
+ * @access Public
  */
 export const search = async (req, res, next) => {
   try {
@@ -37,7 +39,9 @@ export const search = async (req, res, next) => {
 };
 
 /**
+ * @name autocomplete
  * @description Handles autocomplete suggestion and return the suggested products on query
+ * @access Public
  */
 export const autocomplete = async (req, res, next) => {
   try {

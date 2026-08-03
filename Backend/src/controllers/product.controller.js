@@ -10,6 +10,7 @@ import {
 /**
  * @name getProductByIdController
  * @description Controller to get product by id and its related products
+ * @access Public
  */
 export const getProductByIdController = async (req, res, next) => {
   try {
@@ -26,6 +27,7 @@ export const getProductByIdController = async (req, res, next) => {
 /**
  * @name searchAdminProductController
  * @description Controller to search product by admin query
+ * @access Private
  */
 export const searchAdminProductController = async (req, res, next) => {
   try {
@@ -42,6 +44,7 @@ export const searchAdminProductController = async (req, res, next) => {
 /**
  * @name getAdminProductController
  * @description Controller to get product by id for admin
+ * @access Private
  */
 export const getAdminProductController = async (req, res, next) => {
   try {
@@ -58,6 +61,7 @@ export const getAdminProductController = async (req, res, next) => {
 /**
  * @name createProductController
  * @description Controller to create product by admin and automatic embedding generation
+ * @access Private
  */
 export const createProductController = async (req, res, next) => {
   const {
@@ -86,6 +90,7 @@ export const createProductController = async (req, res, next) => {
 /**
  * @name updateProductController
  * @description Controller to update product by admin
+ * @access Private
  */
 export const updateProductController = async (req, res, next) => {
   try {
@@ -106,6 +111,7 @@ export const updateProductController = async (req, res, next) => {
 /**
  * @name deleteProductController
  * @description Controller to delete product by admin
+ * @access Private
  */
 export const deleteProductController = async (req, res, next) => {
   try {

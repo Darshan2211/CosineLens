@@ -2,6 +2,7 @@ import express from "express";
 export const productRouter = express.Router();
 import * as productController from "../controllers/product.controller.js";
 import * as validationMiddleware from "../middlewares/validation.middleware.js";
+import * as authMiddleware from "../middlewares/auth.middleware.js";
 
 /**
  * @route GET /api/products/admin/searchAdminProduct
@@ -10,6 +11,8 @@ import * as validationMiddleware from "../middlewares/validation.middleware.js";
  */
 productRouter.get(
   "/admin/searchAdminProduct",
+  authMiddleware.authUser,
+  authMiddleware.authorize("admin"),
   productController.searchAdminProductController,
 );
 
@@ -19,6 +22,8 @@ productRouter.get(
  * @abstract private
  */
 productRouter.get(
+  authMiddleware.authUser,
+  authMiddleware.authorize("admin"),
   "/admin/getAdminProduct/:id",
   productController.getAdminProductController,
 );
@@ -30,6 +35,8 @@ productRouter.get(
  */
 productRouter.post(
   "/",
+  authMiddleware.authUser,
+  authMiddleware.authorize("admin"),
   validationMiddleware.createProductValidation,
   productController.createProductController,
 );
@@ -41,6 +48,8 @@ productRouter.post(
  */
 productRouter.put(
   "/admin/:id/update",
+  authMiddleware.authUser,
+  authMiddleware.authorize("admin"),
   validationMiddleware.updateProductValidation,
   productController.updateProductController,
 );
@@ -52,6 +61,8 @@ productRouter.put(
  */
 productRouter.patch(
   "/admin/:id/delete",
+  authMiddleware.authUser,
+  authMiddleware.authorize("admin"),
   validationMiddleware.deleteProductValidation,
   productController.deleteProductController,
 );
@@ -60,6 +71,6 @@ productRouter.patch(
  * USER
  * @route GET /api/products/:id
  * @description Route to get product by id and its related products
- * @abstract private
+ * @abstract Public
  */
 productRouter.get("/:id", productController.getProductByIdController);
