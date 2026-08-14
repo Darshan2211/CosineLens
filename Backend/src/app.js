@@ -4,13 +4,24 @@ import { searchRouter } from "./routes/search.route.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import { productRouter } from "./routes/product.route.js";
 import { authRouter } from "./routes/auth.route.js";
-import  cookieParser  from "cookie-parser";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import passport from "./config/passport.js";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  }),
+);
+
+app.use(passport.initialize());
 
 app.use("/api/auth", authRouter);
 app.use("/api/search", searchRouter);

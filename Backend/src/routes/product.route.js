@@ -22,9 +22,9 @@ productRouter.get(
  * @abstract private
  */
 productRouter.get(
+  "/admin/getAdminProduct/:id",
   authMiddleware.authUser,
   authMiddleware.authorize("admin"),
-  "/admin/getAdminProduct/:id",
   productController.getAdminProductController,
 );
 

@@ -30,20 +30,8 @@ export const registerUserController = async (req, res, next) => {
       password: hash,
     });
 
-    const token = jwt.sign(
-      { id: user._id, username: user.username },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" },
-    );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: (process.env.NODE_ENV = "production"),
-      sameSite: "strict",
-    });
-
     res.status(201).json({
-      message: "User registration succesfull",
+      message: `${username} account created`,
       user: {
         id: user._id,
         username: user.username,
@@ -87,7 +75,7 @@ export const loginUserController = async (req, res, next) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: (process.env.NODE_ENV = "production"),
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
 
@@ -96,7 +84,6 @@ export const loginUserController = async (req, res, next) => {
 
       user: {
         id: user._id,
-        username: user.username,
         email: user.email,
       },
     });
@@ -120,12 +107,12 @@ export const logoutUserController = async (req, res, next) => {
 
     res.clearCookie("token", {
       httpOnly: "true",
-      secure: (process.env.NODE_ENV = "production"),
+      secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
     });
 
     return res.status(200).json({
-      message: "User Logged Out Succesfully",
+      message: `${username} Logged Out`,
     });
   } catch (error) {
     next(error);
@@ -153,6 +140,37 @@ export const getMeController = async (req, res, next) => {
         email: user.email,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @name googleLoginController
+ * @description login with Oauth of google
+ * @access Public
+ */
+export const googleLoginController = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.direct(`${process.env.FRONTEND_URL}/login?error=auth_failed`);
+    }
+
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" },
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.redirect(`${process.env.FRONTEND_URL}`);
   } catch (error) {
     next(error);
   }
