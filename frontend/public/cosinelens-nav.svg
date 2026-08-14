@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="148" height="28" viewBox="0 0 148 28" role="img">
+  <title>CosineLens</title>
+  <desc>CosineLens compact nav logo</desc>
+
+  <!-- Outer ring -->
+  <circle cx="14" cy="14" r="12" fill="none" stroke="#2954E3" stroke-width="1.2" opacity="0.30"/>
+
+  <!-- Middle ring -->
+  <circle cx="14" cy="14" r="8" fill="none" stroke="#2954E3" stroke-width="1.2" opacity="0.58"/>
+
+  <!-- Inner fill -->
+  <circle cx="14" cy="14" r="4" fill="#2954E3"/>
+
+  <!-- Cosine wave -->
+  <path d="M2 14 Q6 9 10 14 Q14 19 18 14 Q22 9 26 14"
+        fill="none" stroke="#ffffff" stroke-width="1"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Vector dot -->
+  <circle cx="14" cy="14" r="1.5" fill="#ffffff"/>
+
+  <!-- Wordmark inline -->
+  <text x="34" y="19"
+        font-family="'Space Grotesk', 'Inter', sans-serif"
+        font-size="15" font-weight="700"
+        letter-spacing="-0.3">
+    <tspan fill="#0A0A0C">Cosine</tspan><tspan fill="#2954E3">Lens</tspan>
+  </text>
+</svg>

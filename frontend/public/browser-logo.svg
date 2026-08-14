@@ -1,0 +1,40 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 32 32"
+>
+  <circle
+    cx="16"
+    cy="16"
+    r="14"
+    fill="#2954E3"
+  />
+
+  <circle
+    cx="16"
+    cy="16"
+    r="9"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="2"
+    opacity="0.9"
+  />
+
+  <path
+    d="M5 16
+       Q8 11 11 16
+       Q14 21 17 16
+       Q20 11 23 16
+       Q25 19 27 16"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <circle
+    cx="16"
+    cy="16"
+    r="2.2"
+    fill="#ffffff"
+  />
+</svg>

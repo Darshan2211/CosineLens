@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 56 56" role="img">
+  <title>CosineLens icon</title>
+  <desc>CosineLens icon mark — concentric lens rings with cosine wave and vector dot</desc>
+
+  <!-- Outer ring -->
+  <circle cx="28" cy="28" r="24" fill="none" stroke="#2954E3" stroke-width="1.5" opacity="0.30"/>
+
+  <!-- Middle ring -->
+  <circle cx="28" cy="28" r="16" fill="none" stroke="#2954E3" stroke-width="1.5" opacity="0.58"/>
+
+  <!-- Inner fill -->
+  <circle cx="28" cy="28" r="8" fill="#2954E3"/>
+
+  <!-- Cosine wave -->
+  <path d="M5 28 Q12 18 19 28 Q26 38 33 28 Q40 18 47 28 Q50 33 52 30"
+        fill="none" stroke="#ffffff" stroke-width="1.4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Vector dot -->
+  <circle cx="28" cy="28" r="2.8" fill="#ffffff"/>
+</svg>
