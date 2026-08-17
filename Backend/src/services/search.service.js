@@ -7,14 +7,14 @@ const SEARCH_CACHE_TTL = 300;
 export const searchProduct = async (
   query,
   filters = {},
-  page = 1,
+  // page = 1,
   limit = 10,
 ) => {
   const start = Date.now();
 
   const q = query.trim().toLowerCase();
 
-  const cacheKey = `search:${q}:${JSON.stringify(filters)}:${page}:${limit}`;
+  const cacheKey = `search:${q}:${JSON.stringify(filters)}:${limit}`;
 
   const cached = await getCache(cacheKey);
   if (cached) {
@@ -31,10 +31,11 @@ export const searchProduct = async (
 
   const response = {
     query: q,
-    page: Number(page),
+    // page: Number(page),
     limit: Number(limit),
     total: products.length,
     products,
+
   };
 
   await setCache(cacheKey, response, SEARCH_CACHE_TTL);

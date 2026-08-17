@@ -240,6 +240,8 @@ productSchema.statics.keywordSearch = async function (
       $search: {
         index: "product_text_index",
         compound: {
+          filter: [{ equals: { path: "isActive", value: true } }],
+
           should: [
             {
               text: {
@@ -250,6 +252,7 @@ productSchema.statics.keywordSearch = async function (
               },
             },
           ],
+          minimumShouldMatch: 1,
         },
       },
     },

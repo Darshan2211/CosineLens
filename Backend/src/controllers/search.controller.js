@@ -17,7 +17,7 @@ export const search = async (req, res, next) => {
       });
     }
 
-    const page = Math.max(1, Number(req.query.page) || 1);
+    // const page = Math.max(1, Number(req.query.page) || 1);
     const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 10));
 
     const filters = {
@@ -27,7 +27,7 @@ export const search = async (req, res, next) => {
       inStock: inStock !== undefined ? inStock === "true" : undefined,
     };
 
-    const result = await searchProduct(q.trim(), filters, page, limit);
+    const result = await searchProduct(q.trim(), filters, limit); //page
 
     return res.status(200).json({
       success: true,
