@@ -90,7 +90,7 @@ const productSchema = new mongoose.Schema(
     },
     embeddingUpdatedAt: {
       type: Date,
-      defaule: undefined,
+      default: undefined,
     },
   },
   { timestamps: true },
@@ -238,7 +238,7 @@ productSchema.statics.keywordSearch = async function (
     //Stage 1 - Keyword similarity search
     {
       $search: {
-        index: "product_text_index",
+        index: "product_search_index",
         compound: {
           filter: [{ equals: { path: "isActive", value: true } }],
 
@@ -293,7 +293,7 @@ productSchema.statics.keywordSearch = async function (
       },
     },
   ];
-  return this.aggregate(pipeline);
+  return await this.aggregate(pipeline);
 };
 
 /**

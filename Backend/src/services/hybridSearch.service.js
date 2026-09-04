@@ -42,7 +42,12 @@ export const hybridSearch = async (
     console.error("keywordSearch Failed", keywordSettled.reason?.message);
   }
 
-  if (!vectorResults.length && !keywordResults.length) return [];
+  if (!vectorResults.length && !keywordResults.length)
+    return {
+      keywordResults,
+      vectorResults,
+      hybridResults: [],
+    };
 
   const scores = {};
   const docs = {};
@@ -61,7 +66,7 @@ export const hybridSearch = async (
   const vectorIds = new Set(vectorResults.map((p) => p._id.toString()));
   const keywordIds = new Set(keywordResults.map((p) => p._id.toString()));
 
-  return Object.keys(scores)
+  const hybridResults = Object.keys(scores)
     .map((id) => ({
       ...docs[id],
       hybridScore: Number(scores[id].toFixed(6)),
@@ -74,4 +79,9 @@ export const hybridSearch = async (
     }))
     .sort((a, b) => b.hybridScore - a.hybridScore)
     .slice(0, limit);
+  return {
+    keywordResults,
+    vectorResults,
+    hybridResults,
+  };
 };

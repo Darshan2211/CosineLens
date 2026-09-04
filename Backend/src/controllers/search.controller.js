@@ -49,6 +49,8 @@ export const autocomplete = async (req, res, next) => {
 
     const suggestions = await getAutocompleteSuggestions(q);
 
+    console.log(suggestions)
+
     res.status(200).json({
       success: true,
       total: suggestions.length,

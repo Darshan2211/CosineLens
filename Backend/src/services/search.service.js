@@ -7,7 +7,6 @@ const SEARCH_CACHE_TTL = 300;
 export const searchProduct = async (
   query,
   filters = {},
-  // page = 1,
   limit = 10,
 ) => {
   const start = Date.now();
@@ -25,17 +24,29 @@ export const searchProduct = async (
     };
   }
 
-  const queryVector = await getEmbedding(q);
+  const quembResult = await getEmbedding(q);
+  const embeddedCached = quembResult.cached;
+  const queryVector = quembResult.vector;
 
-  const products = await hybridSearch(q, queryVector, filters, limit);
+  const { keywordResults, vectorResults, hybridResults } = await hybridSearch(
+    q,
+    queryVector,
+    filters,
+    limit,
+  );
 
   const response = {
     query: q,
-    // page: Number(page),
     limit: Number(limit),
-    total: products.length,
-    products,
 
+    embeddedCached,
+
+    keywordResults,
+    vectorResults,
+
+    products: hybridResults,
+
+    total: hybridResults.length,
   };
 
   await setCache(cacheKey, response, SEARCH_CACHE_TTL);

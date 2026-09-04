@@ -21,7 +21,12 @@ export const getEmbedding = async (text) => {
 
   const cached = await getCache(cacheKey);
 
-  if (cached) return cached;
+  if (cached) {
+    return {
+      vector: cached,
+      cached: true,
+    };
+  }
 
   let vector;
   try {
@@ -31,7 +36,7 @@ export const getEmbedding = async (text) => {
       encoding_format: "float",
       config: { outputDimensionality: 1536 },
     });
-    
+
     vector = response.embeddings[0].values;
   } catch (error) {
     if (error.status === 429) throw new Error("Gemini rate limit hit");
@@ -41,5 +46,8 @@ export const getEmbedding = async (text) => {
 
   await setCache(cacheKey, vector, EMBEDDING_TTL);
 
-  return vector;
+  return {
+    vector,
+    cached: false,
+  };
 };
