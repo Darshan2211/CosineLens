@@ -8,7 +8,7 @@ function App() {
   return (
     <AuthProvider>
       <ToastProvider>
-        <RouterProvider router={router} />;
+        <RouterProvider router={router} />
         <Toaster />
       </ToastProvider>
     </AuthProvider>
