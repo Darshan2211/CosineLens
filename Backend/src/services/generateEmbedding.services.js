@@ -5,7 +5,7 @@ import {productModel} from "../models/product.model.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
 
-export const generateEmbedding = () => {
+export const generateEmbedding = async() => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Embedding DB connection\n");
@@ -15,7 +15,7 @@ export const generateEmbedding = () => {
         embedding: { $exists: false },
         isActive: true,
       })
-      .limit(25);
+      .limit(100);
 
     console.log(products);
 

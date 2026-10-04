@@ -14,7 +14,7 @@ const EMBEDDING_TTL = 86400;
  * @returns {Promise<number[]>}
  */
 export const getEmbedding = async (text) => {
-  const normalised = text.trim().toLowerCase();
+  const normalised = text.trim().toLowerCase().slice(0, 500);
   const hash = crypto.createHash("md5").update(normalised).digest("hex");
 
   const cacheKey = `emb${hash}`;

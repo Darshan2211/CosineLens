@@ -8,7 +8,7 @@ import { getAutocompleteSuggestions } from "../services/autocomplete.service.js"
  */
 export const search = async (req, res, next) => {
   try {
-    const { q, brand, minPrice, maxPrice, inStock } = req.query;
+    const { q, minPrice, maxPrice, inStock } = req.query;
 
     if (!q?.trim()) {
       return res.status(400).json({
@@ -17,8 +17,13 @@ export const search = async (req, res, next) => {
       });
     }
 
-    // const page = Math.max(1, Number(req.query.page) || 1);
+    
     const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 10));
+
+    const brand =
+      typeof req.query.brand === "string" && req.query.brand.trim()
+        ? req.query.brand.trim()
+        : undefined;
 
     const filters = {
       brand: brand || undefined,
@@ -34,7 +39,11 @@ export const search = async (req, res, next) => {
       ...result,
     });
   } catch (error) {
-    next(error);
+    return res
+      .status(500)
+      .json({
+        message: "Search is temporarily unvavailable.Please try again later.",
+      });
   }
 };
 
@@ -49,7 +58,7 @@ export const autocomplete = async (req, res, next) => {
 
     const suggestions = await getAutocompleteSuggestions(q);
 
-    console.log(suggestions)
+    console.log(suggestions);
 
     res.status(200).json({
       success: true,
