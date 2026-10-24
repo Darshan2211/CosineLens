@@ -2,7 +2,9 @@
 
 > Search by meaning, not just keywords.
 
-**[Live Demo](https://cosine-lens.vercel.app/)** 
+## 🌐 Live Demo
+
+**Frontend:** https://cosine-lens.vercel.app/
 
 ---
 
