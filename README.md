@@ -24,7 +24,7 @@ It combines two independent search methods — vector similarity and full-text k
 
 ## Architecture
 
-> Add system design diagram here
+![SystemDesign preview](./screenshots/system-design.svg)
 
 ---
 
