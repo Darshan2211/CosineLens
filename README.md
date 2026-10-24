@@ -18,7 +18,7 @@ It combines two independent search methods — vector similarity and full-text k
 
 ## Demo
 
-> Add screenshot or screen recording here
+![Application Preview](./screenshots/cosine_lens_img)
 
 ---
 
